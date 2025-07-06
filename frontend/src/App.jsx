@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 
 import HomePage from "./pages/HomePage";
@@ -6,10 +9,8 @@ import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 
-import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useThemeStore } from "./store/useThemeStore";
-import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
@@ -18,13 +19,15 @@ const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const { theme } = useThemeStore();
 
-  console.log({ onlineUsers });
+  
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
+  
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-
-  console.log({ authUser });
 
   if (isCheckingAuth && !authUser)
     return (
@@ -34,7 +37,7 @@ const App = () => {
     );
 
   return (
-    <div data-theme={theme}>
+    <div className="min-h-screen bg-base-100 text-base-content">
       <Navbar />
 
       <Routes>
@@ -49,4 +52,5 @@ const App = () => {
     </div>
   );
 };
+
 export default App;
